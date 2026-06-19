@@ -61,14 +61,14 @@ export default function WeatherToolbar({
                 className="w-full px-4 py-2 text-left text-white hover:bg-white/10"
                 onClick={() => setOpen(false)}
               >
-                Settings
+                Donate
               </button>
 
               <button
                 className="w-full px-4 py-2 text-left text-white hover:bg-white/10"
                 onClick={() => setOpen(false)}
               >
-                About
+                Feedback
               </button>
 
               <button
@@ -76,6 +76,13 @@ export default function WeatherToolbar({
                 onClick={() => setOpen(false)}
               >
                 Help
+              </button>
+
+              <button
+                className="w-full px-4 py-2 text-left text-white hover:bg-white/10"
+                onClick={() => setOpen(false)}
+              >
+                Manage Locations
               </button>
             </div>
           </>
