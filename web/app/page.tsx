@@ -1,10 +1,5 @@
-import styles from "./page.module.css";
+import WeatherApp from "@/components/main";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <h1>Hello world!</h1>
-      <p>Vamora Weather is under development</p>
-    </main>
-  );
+export default function Page() {
+  return <WeatherApp />;
 }
