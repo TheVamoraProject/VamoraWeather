@@ -1,6 +1,11 @@
 import WeatherApp from "@/components/main";
+import Toolbar from "@/components/Toolbar";
 
 export default function Page() {
-  return <WeatherApp />;
-  
+  return (
+    <>
+      <Toolbar title="Weather" />
+      <WeatherApp />
+    </>
+  );
 }
