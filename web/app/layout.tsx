@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vamora",
-  description: "Making tech fun lol",
+  title: "Vamora Weather",
+  description: "Coming Soon...",
 };
 
 export default function RootLayout({
