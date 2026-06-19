@@ -1,7 +1,7 @@
 "use client";
 
-import { useSkyTime } from "./useSkyTime";
-import SkyBackground from "./SkyBackground";
+import { useSkyTime } from "./SkyTime";
+import SkyBackground from "./Background";
 
 interface HourForecast {
   time: string;
