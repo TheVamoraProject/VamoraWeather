@@ -52,7 +52,7 @@ export default function WeatherApp() {
 
         {/* Current conditions hero */}
         <div className="mt-10 flex flex-col items-center">
-          <span className={`mt-4 text-7xl font-bold ${textPrimary}`}>
+          <span className={`mt-4 text-9xl font-bold ${textPrimary}`}>
             24°
           </span>
           <span className={`mt-1 text-base ${textSecondary}`}>
