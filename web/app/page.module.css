@@ -1,0 +1,10 @@
+.main {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0066AE, #84C5DD);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
