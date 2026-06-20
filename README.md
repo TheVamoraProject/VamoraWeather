@@ -6,6 +6,7 @@ Link: https://vamora-weather.vercel.app/
 
 
 <!-- made by vamora -->
+<hr>
 <p align="center">
   <sub>
     Made by 
