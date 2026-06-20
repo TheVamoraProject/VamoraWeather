@@ -1,5 +1,7 @@
 import WeatherApp from "@/components/main";
 import Toolbar from "@/components/Toolbar";
+import BottomNavbar from "@/components/BottomNavbar";
+import { Home, Settings } from "lucide-react";
 
 export default function Page() {
   return (
