@@ -165,7 +165,7 @@ export default function BottomNavbar({ items }: BottomNavbarProps) {
             className="
               group relative z-10
               flex items-center justify-center
-              h-11 px-4
+              h-11 px-6
               rounded-full
               transition-colors duration-200
               focus-visible:outline-none focus-visible:ring-2
