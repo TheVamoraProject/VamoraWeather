@@ -6,6 +6,12 @@ export default function Page() {
     <>
       <Toolbar title="Weather" />
       <WeatherApp />
+      <BottomNavbar
+  items={[
+    { id: "home", href: "#", icon: Home, label: "Home" },
+    { id: "settings", href: "/settings", icon: Settings, label: "Settings" },
+  ]}
+/>
     </>
   );
 }
