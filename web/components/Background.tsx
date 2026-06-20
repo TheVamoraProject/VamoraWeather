@@ -3,17 +3,23 @@
 import { useMemo } from "react";
 import { useSkyTime } from "./SkyTime";
 
+interface SkyBackgroundProps {
+  color?: "light" | "dark";
+}
+
 // Deterministic star field so it doesn't reshuffle on re-render
 function useStars(count: number) {
   return useMemo(() => {
     let seed = 42;
+
     const rand = () => {
       seed = (seed * 9301 + 49297) % 233280;
       return seed / 233280;
     };
+
     return Array.from({ length: count }, (_, i) => ({
       id: i,
-      top: rand() * 70, // keep stars in upper 70% of sky
+      top: rand() * 70,
       left: rand() * 100,
       size: rand() < 0.85 ? 1 : 2,
       delay: rand() * 4,
@@ -21,8 +27,18 @@ function useStars(count: number) {
   }, [count]);
 }
 
-export default function SkyBackground() {
-  const { nightBlend } = useSkyTime();
+export default function SkyBackground({
+  color,
+}: SkyBackgroundProps) {
+  const { nightBlend: autoNightBlend } = useSkyTime();
+
+  const nightBlend =
+    color === "dark"
+      ? 1
+      : color === "light"
+      ? 0
+      : autoNightBlend;
+
   const stars = useStars(60);
 
   return (
@@ -31,23 +47,28 @@ export default function SkyBackground() {
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
-          background: "linear-gradient(to bottom, #0066AE 0%, #84C5DD 100%)",
+          background:
+            "linear-gradient(to bottom, #0066AE 0%, #84C5DD 100%)",
           opacity: 1 - nightBlend,
         }}
       />
+
       {/* Night sky */}
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
-          background: "linear-gradient(to bottom, #022B4B 0%, #2C434B 100%)",
+          background:
+            "linear-gradient(to bottom, #022B4B 0%, #2C434B 100%)",
           opacity: nightBlend,
         }}
       />
 
-      {/* Stars — fade in as night approaches */}
+      {/* Stars */}
       <div
         className="absolute inset-0 transition-opacity duration-1000"
-        style={{ opacity: Math.max(0, (nightBlend - 0.4) / 0.6) }}
+        style={{
+          opacity: Math.max(0, (nightBlend - 0.4) / 0.6),
+        }}
       >
         {stars.map((star) => (
           <span
@@ -66,7 +87,7 @@ export default function SkyBackground() {
         ))}
       </div>
 
-      {/* Sun glow — fades out as night approaches */}
+      {/* Sun glow */}
       <div
         className="absolute -top-24 right-[15%] h-72 w-72 rounded-full blur-3xl transition-opacity duration-1000"
         style={{
@@ -76,7 +97,7 @@ export default function SkyBackground() {
         }}
       />
 
-      {/* Moon glow — fades in as night approaches */}
+      {/* Moon glow */}
       <div
         className="absolute -top-16 right-[20%] h-48 w-48 rounded-full blur-3xl transition-opacity duration-1000"
         style={{
