@@ -6,13 +6,15 @@ import { Home, Settings } from "lucide-react";
 
 export default function Page() {
   return (
-     <Toolbar title="Weather" />
-      <WeatherApp />
+  <>
+    <Toolbar title="Weather" />
+    <WeatherApp />
     <BottomNavbar
       items={[
-        { id: "home", href: "/", icon: Home, label: "Home" },
-        { id: "settings", href: "/settings", icon: Settings, label: "Settings" },
+        { id: "home", href: "/", icon: "home", label: "Home" },
+        { id: "settings", href: "/settings", icon: "settings", label: "Settings" },
       ]}
     />
-  );
+  </>
+);
 }
