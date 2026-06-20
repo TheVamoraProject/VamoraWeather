@@ -3,14 +3,45 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
+import {
+  Home,
+  Settings,
+  Search,
+  User,
+  Bell,
+  Heart,
+  Mail,
+  Calendar,
+  Folder,
+  Image as ImageIcon,
+  Music,
+  FileText,
+} from "lucide-react";
+
+// Central icon registry — keeps icon *components* out of server-rendered
+// props entirely. Pages only ever pass a string key like "home".
+const ICONS: Record<string, LucideIcon> = {
+  home: Home,
+  settings: Settings,
+  search: Search,
+  user: User,
+  bell: Bell,
+  heart: Heart,
+  mail: Mail,
+  calendar: Calendar,
+  folder: Folder,
+  image: ImageIcon,
+  music: Music,
+  file: FileText,
+};
 
 export interface NavbarItem {
   /** Unique id, also used as the React key */
   id: string;
   /** Route to navigate to on click */
   href: string;
-  /** lucide-react icon component */
-  icon: LucideIcon;
+  /** Key into the ICONS map above (e.g. "home", "settings") */
+  icon: keyof typeof ICONS;
   /** Shown only as a hover tooltip — navbar itself has no labels */
   label: string;
 }
@@ -110,8 +141,15 @@ export default function BottomNavbar({ items }: BottomNavbarProps) {
       />
 
       {items.map((item, index) => {
-        const Icon = item.icon;
+        const Icon = ICONS[item.icon];
         const isActive = index === activeIndex;
+
+        if (!Icon) {
+          if (process.env.NODE_ENV !== "production") {
+            console.warn(`BottomNavbar: unknown icon key "${item.icon}"`);
+          }
+          return null;
+        }
 
         return (
           <button
