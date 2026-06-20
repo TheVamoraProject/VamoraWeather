@@ -18,8 +18,6 @@ import {
   FileText,
 } from "lucide-react";
 
-// Central icon registry — keeps icon *components* out of server-rendered
-// props entirely. Pages only ever pass a string key like "home".
 const ICONS: Record<string, LucideIcon> = {
   home: Home,
   settings: Settings,
@@ -36,13 +34,10 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 export interface NavbarItem {
-  /** Unique id, also used as the React key */
+
   id: string;
-  /** Route to navigate to on click */
   href: string;
-  /** Key into the ICONS map above (e.g. "home", "settings") */
   icon: keyof typeof ICONS;
-  /** Shown only as a hover tooltip — navbar itself has no labels */
   label: string;
 }
 
@@ -51,11 +46,9 @@ interface BottomNavbarProps {
 }
 
 /**
- * Vamora bottom navbar.
- * - 2 to 4 icons, no labels (tooltip on hover)
- * - Frosted glass pill, sticky to the bottom
- * - Sliding indicator animates to the target tab before the route changes,
- *   so the motion reads as "the indicator takes you there"
+ * Vamora NavBar.
+ * 2 to 4 icons max, no labels 
+ * indicator animates to the target tab before the route changes,"
  */
 export default function BottomNavbar({ items }: BottomNavbarProps) {
   if (items.length < 2 || items.length > 4) {
@@ -127,7 +120,6 @@ export default function BottomNavbar({ items }: BottomNavbarProps) {
       "
       aria-label="Primary"
     >
-      {/* Sliding active indicator */}
       <span
         aria-hidden
         className="
@@ -186,7 +178,7 @@ export default function BottomNavbar({ items }: BottomNavbarProps) {
               `}
             />
 
-            {/* Tooltip — only way the page name is ever shown */}
+            {/* hover to see title */}
             <span
               role="tooltip"
               className="
