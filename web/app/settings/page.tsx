@@ -1,12 +1,14 @@
 "use client";
 import Toolbar from "@/components/Toolbar";
 import BottomNavbar from "@/components/BottomNavbar";
+import SkyBackground from "@/components/Background";
 import { Home, Settings } from "lucide-react";
 
 export default function Page() {
   return (
   <>
     <Toolbar title="Settings" />
+    <SkyBackground color="dark" />
     <BottomNavbar
       items={[
         { id: "home", href: "/", icon: "home", label: "Home" },
