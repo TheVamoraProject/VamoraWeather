@@ -3,5 +3,5 @@
 Link: https://vamora-weather.vercel.app/
 
 <p align="center">
-  Made by <img src="https://github.com/user-attachments/assets/efb3ad9b-6b07-4488-9c16-79586297ee5d" alt="Vamora" height="12">
+  <sub>Made by <img src="https://github.com/user-attachments/assets/efb3ad9b-6b07-4488-9c16-79586297ee5d" alt="Vamora" height="10"></sub>
 </p>
