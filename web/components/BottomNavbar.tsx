@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, type LucideIcon } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import type { LucideIcon } from "lucide-react";
 
 export interface NavbarItem {
   /** Unique id, also used as the React key */
