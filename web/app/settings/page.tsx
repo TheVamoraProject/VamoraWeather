@@ -42,7 +42,7 @@ function detectPlatform(): "android" | "linux" | "other" {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const CARD_RADIUS = 14;
+const CARD_RADIUS = 22;
 
 const glass: React.CSSProperties = {
   background: "rgba(255,255,255,0.07)",
@@ -137,7 +137,7 @@ export default function SettingsPage() {
               pointerEvents: bannerDismissed ? "none" : "auto",
             }}
           >
-            <div style={{ ...glass, padding: 14, position: "relative" }}>
+            <div style={{ ...glass, padding: 14, position: "relative", borderRadius: 22 }}>
 
               {/* Close ✕ */}
               <button
@@ -159,7 +159,7 @@ export default function SettingsPage() {
               <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
                 {/* App icon */}
                 <div style={{
-                  width: 52, height: 52, borderRadius: 14, flexShrink: 0,
+                  width: 52, height: 52, borderRadius: 18, flexShrink: 0,
                   background: "linear-gradient(135deg, #1a3a6b 0%, #2563eb 50%, #60a5fa 100%)",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   boxShadow: "0 4px 16px rgba(37,99,235,0.4)",
@@ -184,7 +184,7 @@ export default function SettingsPage() {
                   <button
                     style={{
                       background: "linear-gradient(135deg, #2563eb 0%, #60a5fa 100%)",
-                      border: "none", borderRadius: 8,
+                      border: "none", borderRadius: 12,
                       padding: "7px 14px",
                       color: "white", fontSize: 13, fontWeight: 600,
                       cursor: "pointer", letterSpacing: 0.2,
@@ -340,7 +340,7 @@ function SettingsRow({ position, icon, label, value, onClick }: SettingsRowProps
         }}
       >
         {icon && (
-          <span style={{ color: "rgba(99,179,237,0.88)", flexShrink: 0, display: "flex" }}>
+          <span style={{ color: "rgba(255,255,255,0.92)", flexShrink: 0, display: "flex" }}>
             {icon}
           </span>
         )}
@@ -348,7 +348,7 @@ function SettingsRow({ position, icon, label, value, onClick }: SettingsRowProps
           {label}
         </span>
         {value && (
-          <span style={{ color: "rgba(99,179,237,0.85)", fontSize: 15, fontWeight: 500, marginRight: 4 }}>
+          <span style={{ color: "rgba(255,255,255,0.45)", fontSize: 15, fontWeight: 400, marginRight: 4 }}>
             {value}
           </span>
         )}
@@ -408,7 +408,7 @@ function OptionModal({ open, title, options, selected, onSelect, onClose }: Opti
           WebkitBackdropFilter: "blur(36px)",
           border: "1px solid rgba(255,255,255,0.13)",
           borderBottom: "none",
-          borderRadius: "22px 22px 0 0",
+          borderRadius: "32px 32px 0 0",
           paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
           transform: open ? "translateY(0)" : "translateY(108%)",
           transition: "transform 0.32s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -458,7 +458,7 @@ function OptionModal({ open, title, options, selected, onSelect, onClose }: Opti
                   padding: "13px 14px",
                   background: isSelected ? "rgba(99,179,237,0.13)" : "transparent",
                   border: "none",
-                  borderRadius: 11,
+                  borderRadius: 16,
                   cursor: "pointer",
                   marginBottom: i < options.length - 1 ? 3 : 0,
                   transition: "background 0.14s ease",
