@@ -150,20 +150,14 @@ export default function SettingsPage() {
               </button>
 
               <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: 18, flexShrink: 0,
-                  background: "linear-gradient(135deg, #1a3a6b 0%, #2563eb 50%, #60a5fa 100%)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 4px 16px rgba(37,99,235,0.4)",
-                }}>
-                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
-                    <circle cx="15" cy="11" r="5" fill="#FCD34D" />
-                    <path d="M7 19c0-4 3.6-7 8-7s8 3 8 7" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                    <ellipse cx="10" cy="20" rx="4"   ry="2.5" fill="white" opacity="0.85" />
-                    <ellipse cx="15" cy="21" rx="5.5" ry="3"   fill="white" />
-                    <ellipse cx="20" cy="20" rx="4"   ry="2.5" fill="white" opacity="0.85" />
-                  </svg>
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://vamora.vercel.app/res/apps/Weather.png"
+                  alt="VamiWeather"
+                  width={52}
+                  height={52}
+                  style={{ borderRadius: 18, flexShrink: 0, objectFit: "cover" }}
+                />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ margin: "0 0 2px", color: "rgba(255,255,255,0.95)", fontSize: 14.5, fontWeight: 600 }}>
                     Get the VamiWeather app
