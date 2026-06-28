@@ -224,8 +224,7 @@ export default function AboutPage() {
               <img
                 src={VAMORA_LOGO}
                 alt="Vamora"
-                height={18}
-                style={{ objectFit: "contain", filter: "brightness(0) invert(1)" }}
+                style={{ height: "1em", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)", verticalAlign: "middle", opacity: 0.4 }}
               />
             </a>
           </div>
