@@ -369,7 +369,9 @@ function SettingsRow({ position, icon, label, value, onClick }: SettingsRowProps
   );
 }
 
-// ─── OptionModal (bottom sheet) ───────────────────────────────────────────────
+// ─── OptionModal — Vamora UI style ───────────────────────────────────────────
+// Matches the "Choose platform" dialog: solid dark card, centered float,
+// icon+label left / muted action right, hairline dividers between rows.
 
 interface OptionModalProps {
   open: boolean;
@@ -380,115 +382,134 @@ interface OptionModalProps {
   onClose: () => void;
 }
 
+// Small checkmark icon used as the "Selected" indicator on the right
+function CheckIcon() {
+  return (
+    <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+      <path d="M1.5 5L5 8.5L11.5 1.5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function OptionModal({ open, title, options, selected, onSelect, onClose }: OptionModalProps) {
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop — subtle dark dim, no blur to keep Vamora's clean feel */}
       <div
         onClick={onClose}
         style={{
           position: "fixed", inset: 0,
-          background: "rgba(0,0,0,0.48)",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
+          background: "rgba(0,0,0,0.55)",
           zIndex: 900,
           opacity: open ? 1 : 0,
           pointerEvents: open ? "auto" : "none",
-          transition: "opacity 0.24s ease",
+          transition: "opacity 0.2s ease",
         }}
       />
 
-      {/* Sheet */}
+      {/* Card — centered floating dialog, solid dark, large radius */}
       <div
         style={{
-          position: "fixed", bottom: 0, left: 0, right: 0,
+          position: "fixed",
+          top: "50%", left: "50%",
+          transform: open
+            ? "translate(-50%, -50%) scale(1)"
+            : "translate(-50%, -50%) scale(0.94)",
           zIndex: 901,
-          background: "rgba(14, 20, 36, 0.88)",
-          backdropFilter: "blur(36px)",
-          WebkitBackdropFilter: "blur(36px)",
-          border: "1px solid rgba(255,255,255,0.13)",
-          borderBottom: "none",
-          borderRadius: "32px 32px 0 0",
-          paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
-          transform: open ? "translateY(0)" : "translateY(108%)",
-          transition: "transform 0.32s cubic-bezier(0.32, 0.72, 0, 1)",
-          boxShadow: "0 -12px 48px rgba(0,0,0,0.5)",
+          width: "min(360px, calc(100vw - 48px))",
+          background: "#1c1c1e",
+          borderRadius: 20,
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: "0 24px 64px rgba(0,0,0,0.7)",
+          overflow: "hidden",
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? "auto" : "none",
+          transition: "opacity 0.22s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1)",
         }}
       >
-        {/* Drag handle */}
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
-          <div style={{ width: 36, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.22)" }} />
-        </div>
-
         {/* Header */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "10px 20px 14px",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          padding: "18px 20px 16px",
         }}>
-          <span style={{ color: "rgba(255,255,255,0.95)", fontSize: 17, fontWeight: 600 }}>
+          <span style={{
+            color: "rgba(255,255,255,0.95)",
+            fontSize: 16,
+            fontWeight: 600,
+            letterSpacing: 0.1,
+          }}>
             {title}
           </span>
           <button
             onClick={onClose}
             style={{
-              background: "rgba(255,255,255,0.11)", border: "none", borderRadius: "50%",
-              width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", color: "rgba(255,255,255,0.65)",
-              transition: "background 0.15s",
+              background: "none", border: "none",
+              color: "rgba(255,255,255,0.4)",
+              cursor: "pointer", padding: 4, lineHeight: 1,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              transition: "color 0.15s",
             }}
-            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.2)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.11)")}
+            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.75)")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.4)")}
+            aria-label="Close"
           >
-            <X size={14} />
+            <X size={18} strokeWidth={2} />
           </button>
         </div>
 
-        {/* Option list */}
-        <div style={{ padding: "8px 14px 0" }}>
+        {/* Divider under header */}
+        <div style={{ height: "0.5px", background: "rgba(255,255,255,0.08)", margin: "0 0" }} />
+
+        {/* Option rows */}
+        <div>
           {options.map((opt, i) => {
             const isSelected = opt === selected;
             return (
-              <button
-                key={opt}
-                onClick={() => { onSelect(opt); onClose(); }}
-                style={{
-                  width: "100%",
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  padding: "13px 14px",
-                  background: isSelected ? "rgba(99,179,237,0.13)" : "transparent",
-                  border: "none",
-                  borderRadius: 16,
-                  cursor: "pointer",
-                  marginBottom: i < options.length - 1 ? 3 : 0,
-                  transition: "background 0.14s ease",
-                }}
-                onMouseEnter={e => { if (!isSelected) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)"; }}
-                onMouseLeave={e => { if (!isSelected) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
-              >
-                <span style={{
-                  color: isSelected ? "rgba(99,179,237,1)" : "rgba(255,255,255,0.88)",
-                  fontSize: 16,
-                  fontWeight: isSelected ? 600 : 400,
-                }}>
-                  {opt}
-                </span>
-                {isSelected && (
+              <div key={opt} style={{ position: "relative" }}>
+                <button
+                  onClick={() => { onSelect(opt); onClose(); }}
+                  style={{
+                    width: "100%",
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "15px 20px",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "background 0.12s ease",
+                    textAlign: "left",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                >
+                  {/* Label */}
                   <span style={{
-                    width: 21, height: 21, borderRadius: "50%",
-                    background: "rgba(99,179,237,1)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0,
+                    color: isSelected ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.82)",
+                    fontSize: 15,
+                    fontWeight: isSelected ? 500 : 400,
                   }}>
-                    <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-                      <path d="M1 4.5L4 7.5L10 1.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                    {opt}
                   </span>
+
+                  {/* Right side: checkmark if selected, nothing otherwise */}
+                  {isSelected && <CheckIcon />}
+                </button>
+
+                {/* Hairline divider between rows, not after last */}
+                {i < options.length - 1 && (
+                  <div style={{
+                    height: "0.5px",
+                    background: "rgba(255,255,255,0.07)",
+                    margin: "0 20px",
+                    pointerEvents: "none",
+                  }} />
                 )}
-              </button>
+              </div>
             );
           })}
         </div>
+
+        {/* Bottom padding for breathing room */}
+        <div style={{ height: 8 }} />
       </div>
     </>
   );
