@@ -172,10 +172,8 @@ export default function WeatherHome() {
           {/* ══ Hero ═════════════════════════════════════════════════════ */}
           <div style={{
             textAlign: "center",
-            minHeight: "calc(100dvh - 72px - 88px - 60px)", // viewport minus toolbar, nav, peek gap
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            padding: "12px 0 0",
+            paddingTop: 12,
+            paddingBottom: "calc(100dvh - 72px - 88px - 280px)",
           }}>
             <h1 style={{
               margin: 0,
