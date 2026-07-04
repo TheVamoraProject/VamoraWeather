@@ -25,7 +25,10 @@ function getLS<T>(key: string, fallback: T): T {
 
 function setLS(key: string, value: unknown) {
   if (typeof window === "undefined") return;
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(new Event("vw_settings_changed"));
+  } catch {}
 }
 
 // ─── Platform detection ───────────────────────────────────────────────────────

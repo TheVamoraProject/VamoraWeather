@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sun, CloudSun, Cloud, Moon, CloudRain,
   Wind, Droplets, Eye, Gauge, ChevronDown, type LucideIcon,
@@ -13,13 +13,13 @@ import SkyBackground from "@/components/Background";
 
 interface HourForecast {
   time: string;
-  temp: number;
+  temp: number;        // always stored in °C
   Icon: LucideIcon;
 }
 
 interface DayForecast {
   day: string;
-  high: number;
+  high: number;        // always stored in °C
   low: number;
   Icon: LucideIcon;
   label: string;
@@ -27,40 +27,58 @@ interface DayForecast {
 
 interface ConditionStat {
   label: string;
-  value: string;
+  rawValue: string;    // value without unit suffix
+  unit: "temp" | "wind" | "none"; // so we can swap units
   Icon: LucideIcon;
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Data (all temps in °C, wind in km/h) ────────────────────────────────────
 
 const hourly: HourForecast[] = [
-  { time: "Now",   temp: 17, Icon: Cloud    },
-  { time: "14:00", temp: 17, Icon: CloudSun },
-  { time: "15:00", temp: 18, Icon: Sun      },
-  { time: "16:00", temp: 18, Icon: Sun      },
-  { time: "17:00", temp: 17, Icon: CloudSun },
-  { time: "18:00", temp: 15, Icon: Cloud    },
-  { time: "19:00", temp: 14, Icon: CloudRain},
-  { time: "20:00", temp: 13, Icon: Moon     },
-  { time: "21:00", temp: 12, Icon: Moon     },
+  { time: "Now",   temp: 17, Icon: Cloud     },
+  { time: "14:00", temp: 17, Icon: CloudSun  },
+  { time: "15:00", temp: 18, Icon: Sun       },
+  { time: "16:00", temp: 18, Icon: Sun       },
+  { time: "17:00", temp: 17, Icon: CloudSun  },
+  { time: "18:00", temp: 15, Icon: Cloud     },
+  { time: "19:00", temp: 14, Icon: CloudRain },
+  { time: "20:00", temp: 13, Icon: Moon      },
+  { time: "21:00", temp: 12, Icon: Moon      },
 ];
 
 const forecast: DayForecast[] = [
-  { day: "Today",     high: 18, low: 11, Icon: Cloud,     label: "Cloudy"        },
-  { day: "Tue",       high: 19, low: 12, Icon: CloudSun,  label: "Partly cloudy" },
-  { day: "Wed",       high: 16, low: 10, Icon: CloudRain, label: "Showers"       },
-  { day: "Thu",       high: 14, low:  9, Icon: CloudRain, label: "Rain"          },
-  { day: "Fri",       high: 17, low: 11, Icon: CloudSun,  label: "Partly cloudy" },
+  { day: "Today", high: 18, low: 11, Icon: Cloud,     label: "Cloudy"        },
+  { day: "Tue",   high: 19, low: 12, Icon: CloudSun,  label: "Partly cloudy" },
+  { day: "Wed",   high: 16, low: 10, Icon: CloudRain, label: "Showers"       },
+  { day: "Thu",   high: 14, low:  9, Icon: CloudRain, label: "Rain"          },
+  { day: "Fri",   high: 17, low: 11, Icon: CloudSun,  label: "Partly cloudy" },
 ];
 
-const conditions: ConditionStat[] = [
-  { label: "Feels like", value: "15°",     Icon: Gauge    },
-  { label: "Humidity",   value: "72%",     Icon: Droplets },
-  { label: "Wind",       value: "18 km/h", Icon: Wind     },
-  { label: "Visibility", value: "9 km",    Icon: Eye      },
-];
+// ─── Unit conversion helpers ──────────────────────────────────────────────────
 
-// ─── Shared glass card style ───────────────────────────────────────────────────
+function toF(c: number) { return Math.round(c * 9 / 5 + 32); }
+
+function convertTemp(c: number, unit: string) {
+  return unit === "°F" ? toF(c) : c;
+}
+
+function convertWind(kmh: number, unit: string) {
+  if (unit === "mph")  return Math.round(kmh * 0.621371);
+  if (unit === "m/s")  return Math.round(kmh * 0.277778);
+  return kmh;
+}
+
+// ─── localStorage helper ──────────────────────────────────────────────────────
+
+function getLS<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const v = localStorage.getItem(key);
+    return v !== null ? (JSON.parse(v) as T) : fallback;
+  } catch { return fallback; }
+}
+
+// ─── Shared glass card style ──────────────────────────────────────────────────
 
 const CARD_RADIUS = 22;
 
@@ -77,11 +95,56 @@ const glass: React.CSSProperties = {
 
 export default function WeatherHome() {
   const [forecastExpanded, setForecastExpanded] = useState(false);
+
+  // Read unit preferences from localStorage — same keys settings page writes
+  const [tempUnit, setTempUnit] = useState("°C");
+  const [windUnit, setWindUnit] = useState("km/h");
+
+  useEffect(() => {
+    // Initial read
+    setTempUnit(getLS("vw_temp_unit", "°C"));
+    setWindUnit(getLS("vw_wind_unit", "km/h"));
+
+    // Listen for changes made in the settings page (same tab via storage event
+    // fires on OTHER tabs; for same-tab we use a custom event)
+    const onStorage = () => {
+      setTempUnit(getLS("vw_temp_unit", "°C"));
+      setWindUnit(getLS("vw_wind_unit", "km/h"));
+    };
+
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("vw_settings_changed", onStorage);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("vw_settings_changed", onStorage);
+    };
+  }, []);
+
   const visibleDays = forecastExpanded ? forecast : forecast.slice(0, 3);
+
+  // Current temp display
+  const currentTempC = 17;
+  const currentTemp  = convertTemp(currentTempC, tempUnit);
+  const highTemp     = convertTemp(19, tempUnit);
+  const lowTemp      = convertTemp(11, tempUnit);
+
+  // Wind speed in selected unit
+  const windSpeedRaw = 18; // km/h
+  const windDisplay  = `${convertWind(windSpeedRaw, windUnit)} ${windUnit}`;
+
+  // Feels-like in selected unit
+  const feelsLikeDisplay = `${convertTemp(15, tempUnit)}${tempUnit}`;
+
+  const conditionStats = [
+    { label: "Feels like", value: feelsLikeDisplay,     Icon: Gauge    },
+    { label: "Humidity",   value: "72%",                Icon: Droplets },
+    { label: "Wind",       value: windDisplay,           Icon: Wind     },
+    { label: "Visibility", value: "9 km",               Icon: Eye      },
+  ];
 
   return (
     <>
-      <Toolbar title="" buttons={false} />
+      <Toolbar title="Weather" buttons={true} />
       <SkyBackground color="dark" />
       <BottomNavbar
         items={[
@@ -90,11 +153,11 @@ export default function WeatherHome() {
         ]}
       />
 
-      {/* ── Scrollable content ────────────────────────────────────────────── */}
+      {/* ── Scrollable content ─────────────────────────────────────────── */}
       <div style={{
         position: "fixed", inset: 0,
         overflowY: "auto",
-        paddingTop: 60,
+        paddingTop: 72,
         paddingBottom: 88,
         paddingLeft: 16,
         paddingRight: 16,
@@ -106,8 +169,8 @@ export default function WeatherHome() {
           gap: 14, paddingTop: 8, paddingBottom: 16,
         }}>
 
-          {/* Hero */}
-          <div style={{ textAlign: "center", padding: "18px 0 10px" }}>
+          {/* ══ Hero ═════════════════════════════════════════════════════ */}
+          <div style={{ textAlign: "center", padding: "12px 0 10px" }}>
             <h1 style={{
               margin: 0,
               color: "rgba(255,255,255,0.95)",
@@ -118,21 +181,24 @@ export default function WeatherHome() {
             <p style={{ margin: "2px 0 0", color: "rgba(255,255,255,0.48)", fontSize: 13.5 }}>
               United Kingdom
             </p>
-            
+
+            {/* Big temperature — ° same cap-height as the number */}
             <div style={{
               display: "flex", alignItems: "flex-start", justifyContent: "center",
-              marginTop: 12, lineHeight: 1,
+              marginTop: 10, lineHeight: 1,
             }}>
               <span style={{
                 color: "rgba(255,255,255,0.95)",
                 fontSize: 96, fontWeight: 300, letterSpacing: -4,
                 fontVariantNumeric: "tabular-nums",
               }}>
-                17
+                {currentTemp}
               </span>
+              {/* ° sized to ~60% of the numeral, aligned to its cap-height */}
               <span style={{
-                color: "rgba(255,255,255,0.65)",
-                fontSize: 38, fontWeight: 300, marginTop: 14,
+                color: "rgba(255,255,255,0.75)",
+                fontSize: 52, fontWeight: 300,
+                marginTop: 8, lineHeight: 1,
               }}>
                 °
               </span>
@@ -142,11 +208,11 @@ export default function WeatherHome() {
               Sunny
             </p>
             <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,0.38)", fontSize: 13 }}>
-              H: 19° &nbsp;·&nbsp; L: 11°
+              H: {highTemp}° &nbsp;·&nbsp; L: {lowTemp}°
             </p>
           </div>
 
-          {/* Hourly forecast */}
+          {/* ══ Hourly forecast ══════════════════════════════════════════ */}
           <div style={{ ...glass, padding: "16px 18px" }}>
             <p style={{
               margin: "0 0 14px",
@@ -162,27 +228,24 @@ export default function WeatherHome() {
               scrollbarWidth: "none",
             }}>
               {hourly.map((h) => (
-                <div
-                  key={h.time}
-                  style={{
-                    flexShrink: 0,
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-                  }}
-                >
+                <div key={h.time} style={{
+                  flexShrink: 0,
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                }}>
                   <span style={{ color: "rgba(255,255,255,0.42)", fontSize: 12 }}>{h.time}</span>
                   <h.Icon size={20} color="rgba(255,255,255,0.88)" strokeWidth={1.8} />
                   <span style={{
                     color: "rgba(255,255,255,0.92)", fontSize: 13.5, fontWeight: 500,
                     display: "flex", alignItems: "baseline", gap: 1,
                   }}>
-                    {h.temp}<span style={{ fontSize: "0.72em" }}>°</span>
+                    {convertTemp(h.temp, tempUnit)}<span style={{ fontSize: "0.8em" }}>°</span>
                   </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ══ Forecast card ════════════════════════════════════════════════ */}
+          {/* ══ Forecast card ════════════════════════════════════════════ */}
           <div style={{ ...glass, overflow: "hidden" }}>
             <div style={{ padding: "16px 18px 4px" }}>
               <p style={{
@@ -195,7 +258,6 @@ export default function WeatherHome() {
               </p>
             </div>
 
-            {/* Day rows */}
             <div>
               {visibleDays.map((d, i) => {
                 const isLast = i === visibleDays.length - 1;
@@ -203,10 +265,8 @@ export default function WeatherHome() {
                   <div key={d.day} style={{ position: "relative" }}>
                     <div style={{
                       display: "flex", alignItems: "center",
-                      padding: "13px 18px",
-                      gap: 12,
+                      padding: "13px 18px", gap: 12,
                     }}>
-                      {/* Day name */}
                       <span style={{
                         width: 48, flexShrink: 0,
                         color: "rgba(255,255,255,0.88)",
@@ -215,30 +275,26 @@ export default function WeatherHome() {
                         {d.day}
                       </span>
 
-                      {/* Icon + label */}
                       <div style={{ display: "flex", alignItems: "center", gap: 7, flex: 1 }}>
                         <d.Icon size={17} color="rgba(255,255,255,0.6)" strokeWidth={1.8} />
                         <span style={{ color: "rgba(255,255,255,0.42)", fontSize: 13 }}>{d.label}</span>
                       </div>
 
-                      {/* High / Low */}
                       <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
                         <span style={{ color: "rgba(255,255,255,0.88)", fontSize: 14.5, fontWeight: 500 }}>
-                          {d.high}°
+                          {convertTemp(d.high, tempUnit)}°
                         </span>
                         <span style={{ color: "rgba(255,255,255,0.32)", fontSize: 14.5 }}>
-                          {d.low}°
+                          {convertTemp(d.low, tempUnit)}°
                         </span>
                       </div>
                     </div>
 
-                    {/* Divider — not after last visible row */}
                     {!isLast && (
                       <div style={{
                         position: "absolute", bottom: 0,
                         left: 18, right: 0,
-                        height: "0.5px",
-                        background: "rgba(255,255,255,0.08)",
+                        height: "0.5px", background: "rgba(255,255,255,0.08)",
                       }} />
                     )}
                   </div>
@@ -246,7 +302,6 @@ export default function WeatherHome() {
               })}
             </div>
 
-            {/* 5-day toggle button */}
             <button
               onClick={() => setForecastExpanded(v => !v)}
               style={{
@@ -267,8 +322,7 @@ export default function WeatherHome() {
             >
               {forecastExpanded ? "Show less" : "5-day forecast"}
               <ChevronDown
-                size={14}
-                strokeWidth={2}
+                size={14} strokeWidth={2}
                 style={{
                   transition: "transform 0.25s ease",
                   transform: forecastExpanded ? "rotate(180deg)" : "rotate(0deg)",
@@ -277,13 +331,9 @@ export default function WeatherHome() {
             </button>
           </div>
 
-          {/* ══ Condition stat cards ══════════════════════════════════════════ */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 12,
-          }}>
-            {conditions.map((c) => (
+          {/* ══ Condition stat cards ══════════════════════════════════════ */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            {conditionStats.map((c) => (
               <div key={c.label} style={{ ...glass, padding: "16px 18px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 12 }}>
                   <c.Icon size={14} color="rgba(255,255,255,0.38)" strokeWidth={1.8} />
