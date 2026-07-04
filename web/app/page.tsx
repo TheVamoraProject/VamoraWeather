@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  Sun, CloudSun, Cloud, Moon, CloudRain, CloudSnow,
+  Sun, CloudSun, Cloud, Moon, CloudRain,
   Wind, Droplets, Eye, Gauge, ChevronDown, type LucideIcon,
 } from "lucide-react";
 import Toolbar from "@/components/Toolbar";
@@ -254,8 +254,8 @@ export default function WeatherHome() {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 gap: 6,
                 padding: "12px 18px",
-                borderTop: "0.5px solid rgba(255,255,255,0.08)",
-                background: "transparent", border: "none",
+                background: "transparent",
+                border: "none",
                 borderTop: "0.5px solid rgba(255,255,255,0.08)",
                 cursor: "pointer",
                 color: "rgba(255,255,255,0.42)",
