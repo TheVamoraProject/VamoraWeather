@@ -158,7 +158,7 @@ export default function WeatherHome() {
         position: "fixed", inset: 0,
         overflowY: "auto",
         paddingTop: 72,
-        paddingBottom: 88,
+        paddingBottom: 112,
         paddingLeft: 16,
         paddingRight: 16,
         boxSizing: "border-box",
@@ -173,7 +173,7 @@ export default function WeatherHome() {
           <div style={{
             textAlign: "center",
             paddingTop: 12,
-            paddingBottom: "calc(100dvh - 72px - 88px - 280px)",
+            paddingBottom: 48,
           }}>
             <h1 style={{
               margin: 0,
