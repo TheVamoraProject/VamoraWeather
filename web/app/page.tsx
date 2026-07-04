@@ -172,7 +172,7 @@ export default function WeatherHome() {
           {/* ══ Hero ═════════════════════════════════════════════════════ */}
           <div style={{
             textAlign: "center",
-            paddingTop: 12,
+            paddingTop: 20,
             paddingBottom: 80,
           }}>
             <h1 style={{
