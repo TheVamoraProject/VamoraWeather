@@ -3,13 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import RegisterSW from "./register-sw";
 
-export const metadata = {
-  title: "Weather",
-  description: "Weather app",
-  manifest: "/manifest.json",
-  themeColor: "#000000",
-};
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -21,8 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vamora Weather",
-  description: "Coming Soon...",
+  title: "VamiWeather",
+  description: "Weather forecasts and conditions.",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
