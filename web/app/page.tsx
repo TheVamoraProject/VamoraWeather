@@ -173,7 +173,7 @@ export default function WeatherHome() {
           <div style={{
             textAlign: "center",
             paddingTop: 40,
-            paddingBottom: 80,
+            paddingBottom: 90,
           }}>
             <h1 style={{
               margin: 0,
