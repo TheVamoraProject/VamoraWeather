@@ -170,7 +170,7 @@ export default function WeatherHome() {
         }}>
 
           {/* ══ Hero ═════════════════════════════════════════════════════ */}
-          <div style={{ textAlign: "center", padding: "12px 0 10px" }}>
+          <div style={{ textAlign: "center", padding: "12px 0 28px" }}>
             <h1 style={{
               margin: 0,
               color: "rgba(255,255,255,0.95)",
@@ -182,22 +182,21 @@ export default function WeatherHome() {
               United Kingdom
             </p>
 
-            {/* Big temperature — ° same cap-height as the number */}
+            {/* Big temperature — bold */}
             <div style={{
               display: "flex", alignItems: "flex-start", justifyContent: "center",
               marginTop: 10, lineHeight: 1,
             }}>
               <span style={{
                 color: "rgba(255,255,255,0.95)",
-                fontSize: 96, fontWeight: 300, letterSpacing: -4,
+                fontSize: 96, fontWeight: 700, letterSpacing: -4,
                 fontVariantNumeric: "tabular-nums",
               }}>
                 {currentTemp}
               </span>
-              {/* ° sized to ~60% of the numeral, aligned to its cap-height */}
               <span style={{
                 color: "rgba(255,255,255,0.75)",
-                fontSize: 52, fontWeight: 300,
+                fontSize: 52, fontWeight: 700,
                 marginTop: 8, lineHeight: 1,
               }}>
                 °
