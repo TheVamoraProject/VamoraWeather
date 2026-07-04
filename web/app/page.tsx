@@ -106,7 +106,7 @@ export default function WeatherHome() {
           gap: 14, paddingTop: 8, paddingBottom: 16,
         }}>
 
-          {/* ══ Hero — location + temperature ════════════════════════════════ */}
+          {/* Hero */}
           <div style={{ textAlign: "center", padding: "18px 0 10px" }}>
             <h1 style={{
               margin: 0,
@@ -118,8 +118,7 @@ export default function WeatherHome() {
             <p style={{ margin: "2px 0 0", color: "rgba(255,255,255,0.48)", fontSize: 13.5 }}>
               United Kingdom
             </p>
-
-            {/* Big temperature */}
+            
             <div style={{
               display: "flex", alignItems: "flex-start", justifyContent: "center",
               marginTop: 12, lineHeight: 1,
@@ -147,7 +146,7 @@ export default function WeatherHome() {
             </p>
           </div>
 
-          {/* ══ Hourly forecast ══════════════════════════════════════════════ */}
+          {/* Hourly forecast */}
           <div style={{ ...glass, padding: "16px 18px" }}>
             <p style={{
               margin: "0 0 14px",
