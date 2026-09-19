@@ -1,0 +1,35 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>icons/gray/chevron-down.svg</file>
+        <file>icons/gray/cloud-rain.svg</file>
+        <file>icons/gray/cloud-sun.svg</file>
+        <file>icons/gray/cloud.svg</file>
+        <file>icons/gray/droplets.svg</file>
+        <file>icons/gray/eye.svg</file>
+        <file>icons/gray/gauge.svg</file>
+        <file>icons/gray/house.svg</file>
+        <file>icons/gray/moon.svg</file>
+        <file>icons/gray/more-vertical.svg</file>
+        <file>icons/gray/plus.svg</file>
+        <file>icons/gray/settings.svg</file>
+        <file>icons/gray/sun.svg</file>
+        <file>icons/gray/wind.svg</file>
+        <file>icons/gray/x.svg</file>
+        <file>icons/white/chevron-down.svg</file>
+        <file>icons/white/cloud-rain.svg</file>
+        <file>icons/white/cloud-sun.svg</file>
+        <file>icons/white/cloud.svg</file>
+        <file>icons/white/droplets.svg</file>
+        <file>icons/white/eye.svg</file>
+        <file>icons/white/gauge.svg</file>
+        <file>icons/white/house.svg</file>
+        <file>icons/white/moon.svg</file>
+        <file>icons/white/more-vertical.svg</file>
+        <file>icons/white/plus.svg</file>
+        <file>icons/white/settings.svg</file>
+        <file>icons/white/sun.svg</file>
+        <file>icons/white/wind.svg</file>
+        <file>icons/white/x.svg</file>
+    </qresource>
+</RCC>

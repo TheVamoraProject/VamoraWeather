@@ -1,0 +1,12 @@
+/home/anis/Vamora/VamoraWeather/linux/target/release/deps/which-97ddf6517c77c11c.d: /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/lib.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/checker.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/error.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/finder.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/helper.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/sys.rs
+
+/home/anis/Vamora/VamoraWeather/linux/target/release/deps/libwhich-97ddf6517c77c11c.rlib: /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/lib.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/checker.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/error.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/finder.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/helper.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/sys.rs
+
+/home/anis/Vamora/VamoraWeather/linux/target/release/deps/libwhich-97ddf6517c77c11c.rmeta: /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/lib.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/checker.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/error.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/finder.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/helper.rs /home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/sys.rs
+
+/home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/lib.rs:
+/home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/checker.rs:
+/home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/error.rs:
+/home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/finder.rs:
+/home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/helper.rs:
+/home/anis/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/which-8.0.6/src/sys.rs:

@@ -1,0 +1,5 @@
+module com.vamora.weather
+optional plugin com_vamora_weather
+classname com_vamora_weather_plugin
+typeinfo plugin.qmltypes
+prefer :/qt/qml/com/vamora/weather/

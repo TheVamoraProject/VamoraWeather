@@ -1,0 +1,13 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qml/BottomNavbar.qml</file>
+        <file>qml/GlassCard.qml</file>
+        <file>qml/IconImage.qml</file>
+        <file>qml/SettingsPage.qml</file>
+        <file>qml/SkyBackground.qml</file>
+        <file>qml/WeatherHome.qml</file>
+        <file>qml/WeatherToolbar.qml</file>
+    </qresource>
+</RCC>
