@@ -1,9 +1,9 @@
 import QtQuick
 
-// Renders a pre-colored Lucide SVG icon. Alpha/opacity variants (matching
-// the site's rgba(255,255,255,X) icon colors) are done via plain Item
-// opacity on top of a solid "white" source — no shader effects/extra
-// modules needed, just two baked color sets (white/gray).
+// i miss that kind of misery
+// the kind where you are nice to me
+// but only in the evening
+// so i ask am i just dreaming (OK IM SO SORRY LMAOOO)
 Item {
     id: root
 
