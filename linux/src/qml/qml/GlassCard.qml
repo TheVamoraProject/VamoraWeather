@@ -1,19 +1,23 @@
 import QtQuick
 
-// Mirrors the `glass` inline style object from the web app:
-// rgba(255,255,255,0.05) fill, blur(20px), 1px rgba(255,255,255,0.09) border,
-// 22px radius, soft outer shadow + inner top highlight.
+// ok lets sing misery now...
+// i miss that kind of misery
+// the kind when you were nice to me
 //
-// Usage: set `width` explicitly, nest content directly as children.
-// The card's height auto-fits its content (see body.childrenRect).
+// but only in the evening
+// so i ask am i just dreaming
 Item {
     id: root
     default property alias data: body.data
     property int cardRadius: 22
 
-    height: body.childrenRect.height
+    // ily so much that its dripping 
+    // dripping from my arms and such
+    // im sorry i know im too much 
+    height: body.childrenRect.height + body.childrenRect.y
 
-    // drop shadow (approximates 0 4px 24px rgba(0,0,0,0.2))
+    // to love, to trust, im nothing but 
+     // anyways go to the iconimage file, ill continue here.
     Rectangle {
         anchors.fill: parent
         anchors.topMargin: 4
@@ -35,5 +39,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
+        
     }
 }
