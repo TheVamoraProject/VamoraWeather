@@ -1,21 +1,27 @@
 import QtQuick
 
-// Port of Background.tsx with color="dark" (as used on the weather home page).
+// Port of Background.tsx: `theme` mirrors its `color` prop — "Dark" forces
+// the night sky, "Light" forces the day sky, "Auto" follows real day/night
+// (isDay from the weather data), like Background without a color override.
 Item {
     id: root
     anchors.fill: parent
 
     property real cornerRadius: 0
+    property string theme: "Auto"   // "Auto" | "Dark" | "Light"
+    property bool isDay: false
 
-    // Night sky gradient: #022B4B -> #2C434B
+    readonly property bool night: theme === "Dark" ? true : theme === "Light" ? false : !isDay
+
+    // Night sky gradient: #022B4B -> #2C434B; day: #0066AE -> #84C5DD.
     Rectangle {
         anchors.fill: parent
         radius: root.cornerRadius
         Behavior on radius { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         gradient: Gradient {
             orientation: Gradient.Vertical
-            GradientStop { position: 0.0; color: "#022B4B" }
-            GradientStop { position: 1.0; color: "#2C434B" }
+            GradientStop { position: 0.0; color: root.night ? "#022B4B" : "#0066AE" }
+            GradientStop { position: 1.0; color: root.night ? "#2C434B" : "#84C5DD" }
         }
     }
 
@@ -23,7 +29,8 @@ Item {
     Item {
         id: stars
         anchors.fill: parent
-        opacity: 1.0 // nightBlend = 1 -> (1 - 0.4) / 0.6 = 1
+        opacity: root.night ? 1.0 : 0.0 // nightBlend = 1 -> (1 - 0.4) / 0.6 = 1
+        Behavior on opacity { NumberAnimation { duration: 600 } }
 
         Repeater {
             model: 60
@@ -64,5 +71,5 @@ Item {
         }
     }
 
-    // Moon glow removed — no longer part of the background.
+    // THEY CALL ME LORD VERITY
 }
