@@ -23,9 +23,6 @@ Item {
         border.width: 1
     }
 
-    // sliding indicator pill — computed directly (every nav item shares
-    // the same fixed width), so it's correct from the very first frame
-    // instead of depending on Repeater delegates already existing.
     Rectangle {
         id: indicator
         y: 6
