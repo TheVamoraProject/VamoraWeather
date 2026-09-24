@@ -8,22 +8,24 @@ Flickable {
     boundsBehavior: Flickable.DragAndOvershootBounds
     clip: true
 
-    readonly property var preferences: [
-        { icon: "gauge", label: "Units", value: "Celsius" },
-        { icon: "cloud", label: "Notifications", value: "On" },
-        { icon: "eye", label: "Location services", value: "On" }
-    ]
+    property var service
 
-    readonly property var about: [
-        { icon: "moon", label: "Appearance", value: "Dark" },
+    readonly property var preferences: service ? [
+        { icon: "gauge", label: "Units", value: service.tempUnit === "°C" ? "Celsius" : "Fahrenheit" },
+        { icon: "cloud", label: "Notifications", value: service.notificationsEnabled ? "On" : "Off" },
+        { icon: "eye", label: "Location services", value: service.cityName !== "" ? service.cityName : "Auto" }
+    ] : []
+
+    readonly property var about: service ? [
+        { icon: "moon", label: "Appearance", value: service.theme },
         { icon: "settings", label: "About VamoraOS", value: "1.0.0" }
-    ]
+    ] : []
 
     Column {
         id: content
         width: Math.min(480, root.width - 32)
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 72 + 8
+        y: 84 + 12
         spacing: 14
 
         Text {
@@ -104,6 +106,16 @@ Flickable {
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (!root.service)
+                                    return;
+                                if (index === 0)
+                                    root.service.toggleTempUnit();
+                                else if (index === 1)
+                                    root.service.toggleNotifications();
+                                else if (index === 2)
+                                    root.service.detectLocation();
+                            }
                         }
                     }
                 }
@@ -167,6 +179,10 @@ Flickable {
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                if (root.service && index === 0)
+                                    root.service.cycleTheme();
+                            }
                         }
                     }
                 }
