@@ -9,13 +9,12 @@ Item {
     property bool closeButtonVisible: true
 
     signal closeRequested()
+    signal addRequested()
+    signal menuItemRequested(string item)
 
-    height: 68
+    height: 68 + 16
     z: 20
 
-    // Frameless window has no native titlebar to grab, so dragging the
-    // toolbar itself moves the window (sits below the title/buttons in
-    // z-order so it never steals their clicks).
     MouseArea {
         anchors.fill: parent
         onPressed: (mouse) => {
@@ -27,7 +26,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -2
+        anchors.verticalCenterOffset: 6
         text: root.title
         color: "#ffffff"
         font.pixelSize: 30
@@ -39,9 +38,9 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 12
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 8
         spacing: 2
 
-        // Add button
         Rectangle {
             id: addBtn
             visible: root.buttonsVisible
@@ -56,10 +55,10 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
+                onClicked: root.addRequested()
             }
         }
 
-        // More button
         Rectangle {
             id: moreBtn
             visible: root.buttonsVisible
@@ -78,7 +77,6 @@ Item {
             }
         }
 
-        // Close button (rightmost — window chrome, always last)
         Rectangle {
             id: closeBtn
             visible: root.closeButtonVisible
@@ -98,7 +96,6 @@ Item {
         }
     }
 
-    // Click-outside catcher
     MouseArea {
         anchors.fill: parent
         z: 25
@@ -147,7 +144,10 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: menu.visible = false
+                        onClicked: {
+                            menu.visible = false;
+                            root.menuItemRequested(modelData);
+                        }
                     }
                 }
             }
