@@ -4,38 +4,22 @@ Flickable {
     id: root
     anchors.fill: parent
     contentWidth: width
-    contentHeight: content.height + content.y + 32
+    contentHeight: content.height + content.y + 96
     boundsBehavior: Flickable.DragAndOvershootBounds
     clip: true
 
     property bool forecastExpanded: false
+    property var service
 
-    readonly property var hourly: [
-        { time: "Now",   temp: 17, icon: "cloud" },
-        { time: "14:00", temp: 17, icon: "cloud-sun" },
-        { time: "15:00", temp: 18, icon: "sun" },
-        { time: "16:00", temp: 18, icon: "sun" },
-        { time: "17:00", temp: 17, icon: "cloud-sun" },
-        { time: "18:00", temp: 15, icon: "cloud" },
-        { time: "19:00", temp: 14, icon: "cloud-rain" },
-        { time: "20:00", temp: 13, icon: "moon" },
-        { time: "21:00", temp: 12, icon: "moon" }
-    ]
+    readonly property var hourly: service ? service.hourly : []
+    readonly property var forecast: service ? service.daily : []
 
-    readonly property var forecast: [
-        { day: "Today", high: 18, low: 11, icon: "cloud",      label: "Cloudy" },
-        { day: "Tue",   high: 19, low: 12, icon: "cloud-sun",  label: "Partly cloudy" },
-        { day: "Wed",   high: 16, low: 10, icon: "cloud-rain", label: "Showers" },
-        { day: "Thu",   high: 14, low: 9,  icon: "cloud-rain", label: "Rain" },
-        { day: "Fri",   high: 17, low: 11, icon: "cloud-sun",  label: "Partly cloudy" }
-    ]
-
-    readonly property var conditionStats: [
-        { label: "Feels like", value: "15\u00B0", icon: "gauge" },
-        { label: "Humidity",   value: "72%",       icon: "droplets" },
-        { label: "Wind",       value: "18 km/h",   icon: "wind" },
-        { label: "Visibility", value: "9 km",      icon: "eye" }
-    ]
+    readonly property var conditionStats: service ? [
+        { label: "Feels like", value: service.toTemp(service.feelsLikeC) + "\u00B0", icon: "gauge" },
+        { label: "Humidity",   value: service.humidity + "%",                          icon: "droplets" },
+        { label: "Wind",       value: service.windKmh + " km/h",                       icon: "wind" },
+        { label: "Visibility", value: service.visibilityKm + " km",                   icon: "eye" }
+    ] : []
 
     readonly property var visibleDays: forecastExpanded ? forecast : forecast.slice(0, 3)
 
@@ -43,10 +27,9 @@ Flickable {
         id: content
         width: Math.min(480, root.width - 32)
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 72 + 8
+        y: 84 + 12
         spacing: 14
 
-        // ══ Hero ═══════════════════════════════════════════════
         Column {
             width: parent.width
             topPadding: 40
@@ -55,14 +38,14 @@ Flickable {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "London"
+                text: service ? service.cityName : "—"
                 color: "#F2FFFFFF"
                 font.pixelSize: 22
                 font.weight: Font.DemiBold
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "United Kingdom"
+                text: service ? service.country : ""
                 color: "#7AFFFFFF"
                 font.pixelSize: 14
                 topPadding: 2
@@ -74,7 +57,7 @@ Flickable {
                 spacing: 0
 
                 Text {
-                    text: "17"
+                    text: service ? service.toTemp(service.tempC) : "—"
                     color: "#F2FFFFFF"
                     font.pixelSize: 96
                     font.weight: Font.Bold
@@ -92,21 +75,20 @@ Flickable {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "Sunny"
+                text: service ? service.conditionLabel : "—"
                 color: "#99FFFFFF"
                 font.pixelSize: 15
                 topPadding: 2
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "H: 19\u00B0   \u00B7   L: 11\u00B0"
+                text: service ? ("H: " + service.toTemp(service.todayHigh) + "\u00B0   \u00B7   L: " + service.toTemp(service.todayLow) + "\u00B0") : ""
                 color: "#61FFFFFF"
                 font.pixelSize: 13
                 topPadding: 4
             }
         }
 
-        // ══ Hourly forecast ════════════════════════════════════
         GlassCard {
             width: parent.width
 
@@ -156,7 +138,7 @@ Flickable {
                                 Row {
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     Text {
-                                        text: modelData.temp
+                                        text: service ? service.toTemp(modelData.temp) : "—"
                                         color: "#EBFFFFFF"
                                         font.pixelSize: 14
                                         font.weight: Font.Medium
@@ -175,7 +157,6 @@ Flickable {
             }
         }
 
-        // ══ Forecast card ══════════════════════════════════════
         GlassCard {
             id: forecastCard
             width: parent.width
@@ -240,12 +221,12 @@ Flickable {
                                 layoutDirection: Qt.RightToLeft
 
                                 Text {
-                                    text: modelData.low + "\u00B0"
+                                    text: service ? (service.toTemp(modelData.low) + "\u00B0") : ""
                                     color: "#52FFFFFF"
                                     font.pixelSize: 15
                                 }
                                 Text {
-                                    text: modelData.high + "\u00B0"
+                                    text: service ? (service.toTemp(modelData.high) + "\u00B0") : ""
                                     color: "#E0FFFFFF"
                                     font.pixelSize: 15
                                     font.weight: Font.Medium
@@ -310,7 +291,6 @@ Flickable {
             }
         }
 
-        // ══ Condition stat cards ═══════════════════════════════
         Grid {
             width: parent.width
             columns: 2
@@ -355,6 +335,68 @@ Flickable {
                         }
                     }
                 }
+            }
+        }
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            visible: service && service.loading && service.hourly.length === 0
+            text: "Loading weather…"
+            color: "#7AFFFFFF"
+            font.pixelSize: 14
+        }
+
+        GlassCard {
+            width: parent.width
+            visible: service && service.error !== ""
+
+            Column {
+                x: 18; y: 16
+                width: parent.width - 36
+                bottomPadding: 16
+                spacing: 10
+
+                Text {
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    text: service ? service.error : ""
+                    color: "#FF9D8A"
+                    font.pixelSize: 14
+                }
+                Text {
+                    text: "Tap to retry"
+                    color: "#B3FFFFFF"
+                    font.pixelSize: 14
+                    font.weight: Font.Medium
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: service.refresh()
+            }
+        }
+
+        Item {
+            width: parent.width
+            height: 24
+            visible: service && service.updatedTime !== ""
+
+            Text {
+                anchors.centerIn: parent
+                text: service ? ("Updated " + service.updatedTime + "  ·  tap to refresh") : ""
+                color: refreshArea.containsMouse ? "#B3FFFFFF" : "#52FFFFFF"
+                font.pixelSize: 12
+                Behavior on color { ColorAnimation { duration: 150 } }
+            }
+
+            MouseArea {
+                id: refreshArea
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: service.refresh()
             }
         }
     }
